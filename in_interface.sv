@@ -37,16 +37,15 @@ interface interface_in(input logic clk, rst_n);
 
 
   //-------------Asertii_addr-----------------
-   property steady_addr_during_transaction;
+   property steady_addr_i_during_transaction;
      @(posedge clk) disable iff (rst_n==0)//daca avem reset, nu se executa asertia
      valid_i |-> (addr_i != 'bz) and (addr_i != 'bx);
   endproperty
   
-  asertia_steady_addr_during_transaction assert property (steady_addr_i_during_transaction) 
+  asertia_steady_addr_i_during_transaction assert property (steady_addr_i_during_transaction) 
     else $error("INTERFATA_INTRARE: a picat asertia asertia_steady_addr_i_during_transaction");
     steady_addr_i_during_transaction_C: cover property (steady_addr_i_during_transaction);//ne asiguram ca proprietatea a fost accesata macar o data
       
-
 
 
 //-------------Asertii_d_in-----------------
@@ -58,6 +57,7 @@ interface interface_in(input logic clk, rst_n);
   asertia_steady_d_in_during_transaction assert property (steady_d_in_during_transaction) 
     else $error("INTERFATA_INTRARE: a picat asertia asertia_steady_d_in_during_transaction");
     steady_d_in_during_transaction_C: cover property (steady_d_in_during_transaction);//ne asiguram ca proprietatea a fost accesata macar o data
+
 
 //-------------Asertii_d_out-----------------
    property steady_d_out_during_transaction;
@@ -80,6 +80,16 @@ interface interface_in(input logic clk, rst_n);
     else $error("INTERFATA_INTRARE: a picat asertia asertia_steady_rd_wr_i_during_transaction");
     steady_rd_wr_i_during_transaction_C: cover property (steady_rd_wr_i_during_transaction);//ne asiguram ca proprietatea a fost accesata macar o data
       
+
+// la scriere, addr_i, d_in si rd_wr_i sa ramana stabile
+   property write_bus_stable;
+     @(posedge clk) disable iff (!rst_n)
+     (valid_i && !rd_wr_i) |=> ($stable(addr_i) && $stable(d_in) && $stable(rd_wr_i));
+  endproperty
+
+  assert_write_bus_stable assert property (write_bus_stable)
+    else $error("INTERFATA_INTRARE: semnalele de write nu au ramas stabile");
+    write_bus_stable_C cover property (write_bus_stable);
       
   
   
