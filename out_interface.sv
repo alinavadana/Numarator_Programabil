@@ -1,4 +1,4 @@
-  interface interface_in(input logic clk, rst_n);
+  interface interface_out(input logic clk, rst_n);
   logic [7:0] count_o;
   logic ovf_o;
 
