@@ -1,7 +1,7 @@
 
 `include "environment.sv"
 
-program default_test(intf_in in_intf, intf_out out_intf);
+program test(interface_in in_intf, interface_out out_intf);
 
     environment env;
 
