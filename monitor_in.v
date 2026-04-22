@@ -1,7 +1,7 @@
 class monitor_in;
 
   // Referinta virtuala catre interfata de intrare 
-  virtual in_int.MONITOR in_vif;
+  virtual interface_in.MONITOR in_vif;
 
   // Mailbox catre scoreboard
   mailbox mon2scb;
@@ -10,7 +10,7 @@ class monitor_in;
   int no_transactions;
 
   // Constructor
-  function new(virtual in_int.MONITOR in_vif, mailbox mon2scb);
+  function new(virtual interface_in.MONITOR in_vif, mailbox mon2scb);
     this.in_vif    = in_vif;
     this.mon2scb   = mon2scb;
     no_transactions = 0;
@@ -46,14 +46,14 @@ class monitor_in;
         // Captura semnalelor de intrare
         
 		trans.valid_i = in_vif.monitor_cb.valid_i;
-        trans.rd_wr_i = in_vif.monitor_cb.rd_wr_i;
+        trans.rd_wr = in_vif.monitor_cb.rd_wr;
         trans.addr_i  = in_vif.monitor_cb.addr_i;
-		 if (trans.rd_wr_i == 1'b0) 
+		 if (trans.rd_wr == 1'b0) 
         trans.d_in    = in_vif.monitor_cb.d_in;
        
         // Daca e operatie de citire (rd_wr_i=1), asteptam
         // inca un ciclu ca sa capturam si d_out de la DUT
-        if (trans.rd_wr_i == 1'b1) begin
+        if (trans.rd_wr == 1'b1) begin
           @(posedge in_vif.clk);
           trans.d_out = in_vif.monitor_cb.d_out;
         end
@@ -97,5 +97,4 @@ end
 endtask
 
 endclass
-
 
