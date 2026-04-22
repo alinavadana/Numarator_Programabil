@@ -1,3 +1,6 @@
+`ifndef __ENVIRONMENT__
+`define __ENVIRONMENT__
+
 `include "transaction_in.sv"
 `include "transaction_out.sv"
 `include "generator_in.sv"
@@ -44,6 +47,7 @@ class environment;
   endtask
   
   task test();
+  $display("%0t am ajuns in taskul test", $time);
     fork 
       gen.main();
       driv.main();
@@ -65,11 +69,18 @@ class environment;
   endtask  
   
   task run;
+    $display("%0t --- [ENV]  am inrat in run---", $time);
     pre_test();
+    $display("%0t --- [ENV]  dupa pre_test---", $time);
     test();
+    $display("%0t --- [ENV]  dupa test---", $time);
     post_test();
     $display("--- SIMULARE TERMINATA CU SUCCES ---");
+    #300
     $finish;
   endtask
   
 endclass
+
+
+`endif
