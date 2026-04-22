@@ -37,7 +37,7 @@ class coverage_out;
     $display("----------------------------------------");
     $display("[COVERAGE_OUT] Count coverage     = %.2f%%", output_cg.count_o_cp.get_coverage());
     $display("[COVERAGE_OUT] Overflow coverage  = %.2f%%", output_cg.overflow_o_cp.get_coverage());
-    $display("[COVERAGE_OUT] Cross Count/Ovf    = %.2f%%", output_cg.count_x_ovf.get_coverage());
+ //   $display("[COVERAGE_OUT] Cross Count/Ovf    = %.2f%%", output_cg.count_x_ovf.get_coverage());
     $display("[COVERAGE_OUT] Overall Out Cov    = %.2f%%", output_cg.get_coverage());
     $display("----------------------------------------");
   endfunction
