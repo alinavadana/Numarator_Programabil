@@ -11,7 +11,7 @@ class coverage_in;
 
    // tip operatie (0=scriere, 1=citire)
 
-    rd_wr_cp: coverpoint trans_covered.rd_wr_i {
+    rd_wr_cp: coverpoint trans_covered.rd_wr {
       bins scriere = {0};
       bins citire  = {1};
     }
@@ -41,11 +41,11 @@ class coverage_in;
 
 
     delay_cp: coverpoint trans_covered.delay {
-	bind fara_delay = {0};
+	  bins fara_delay = {0};
       bins delay_mic    = {[1:3]};
       bins delay_mediu  = {[4:6]};
       bins delay_mare   = {[7:9]};
-	  bins delay_foarte_mare = {[9:$]};
+	  bins delay_foarte_mare = {[10:$]};
 	  illegal_bins delay_negativ = default;
     }
 
