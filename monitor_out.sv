@@ -3,7 +3,7 @@
 class monitor_out;
 
   // Referinta virtuala catre interfata de iesire (out_int)
-  virtual out_interface out_vif;
+  virtual interface_out out_vif;
 
   // Mailbox catre scoreboard pentru datele de iesire
   mailbox mon2scb;
@@ -12,7 +12,7 @@ class monitor_out;
   int no_transactions;
 
   // Constructor
-  function new(virtual out_int out_vif, mailbox mon2scb);
+  function new(virtual interface_out out_vif, mailbox mon2scb);
     this.out_vif     = out_vif;
     this.mon2scb     = mon2scb;
     this.no_transactions = 0;
@@ -21,11 +21,11 @@ class monitor_out;
   // Task pentru gestionarea reset-ului pe interfata de iesire
   task reset;
     // Asteptam ca rst_n sa devina activ (0)
-    wait(!out_vif.rst_n);
+    wait(!out_vif.rst_ni);
     $display("[%0t] ----[MONITOR_OUT] RESET DETECTED (ACTIVE)----", $time);
 
     // Asteptam ca rst_n sa devina inactiv (1)
-    wait(out_vif.rst_n);
+    wait(out_vif.rst_ni);
     $display("[%0t] ----[MONITOR_OUT] RESET RELEASED (INACTIVE)----", $time);
   endtask
 
