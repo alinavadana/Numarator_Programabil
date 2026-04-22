@@ -29,7 +29,7 @@ endtask
 
 task write_register(bit [1:0] addr, bit [7:0] data );
 
-    if (!trans.randomize() with {d_in ==data; addr_i==addr; valid_i==1; rd_wr_i==0;})
+    if (!trans.randomize() with {d_in ==data; addr_i==addr; valid_i==1; rd_wr==0;})
         $error("Generator failed to randomize");
     tr = trans.do_copy();
     gen2driv.put(tr);
@@ -38,7 +38,7 @@ endtask
 
 task read_register(bit [1:0] addr );
 
-    if (!trans.randomize() with { addr_i==addr; valid_i==1; rd_wr_i==1;})
+    if (!trans.randomize() with { addr_i==addr; valid_i==1; rd_wr==1;})
         $error("Generator failed to randomize");
     tr = trans.do_copy();
     gen2driv.put(tr);
