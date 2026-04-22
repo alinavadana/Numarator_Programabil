@@ -5,10 +5,10 @@
 `include "transaction_out.sv"
 `include "generator_in.sv"
 `include "driver_in.sv"
-`include "monitor_in.sv"
-`include "monitor_out.sv"
 `include "coverage_in.sv"
 `include "coverage_out.sv"
+`include "monitor_in.sv"
+`include "monitor_out.sv"
 //`include "scoreboard.sv"
 
 class environment;
@@ -67,6 +67,11 @@ class environment;
 //    scb.cov_in.print_coverage();
   //  scb.cov_out.print_coverage();
   endtask  
+
+  function void report();
+    mon_in.coverage_collector.print_coverage();
+    mon_out.coverage_collector.print_coverage();
+  endfunction
   
   task run;
     $display("%0t --- [ENV]  am inrat in run---", $time);
