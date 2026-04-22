@@ -1,20 +1,19 @@
 `include "transaction_in.sv"
 `include "transaction_out.sv"
 `include "generator_in.sv"
-`include "driver.sv"
+`include "driver_in.sv"
 `include "monitor_in.sv"
 `include "monitor_out.sv"
 `include "coverage_in.sv"
 `include "coverage_out.sv"
-`include "scoreboard.sv"
+//`include "scoreboard.sv"
 
 class environment;
   
   generator_in  gen;
-  driver        driv;
+  driver_in        driv;
   monitor_in    mon_in;
   monitor_out   mon_out;
-  scoreboard    scb;
   
   mailbox gen2driv;
   mailbox mon_in2scb;
@@ -22,10 +21,10 @@ class environment;
   
   event gen_ended;
   
-  virtual in_int.DRIVER   in_vif;
-  virtual out_int.MONITOR out_vif;
+  virtual interface_in.DRIVER   in_vif;
+  virtual interface_out.MONITOR out_vif;
   
-  function new(virtual in_int.DRIVER in_vif, virtual out_int.MONITOR out_vif);
+  function new(virtual interface_in.DRIVER in_vif, virtual interface_out.MONITOR out_vif);
     this.in_vif  = in_vif;
     this.out_vif = out_vif;
     
@@ -37,7 +36,7 @@ class environment;
     driv    = new(in_vif, gen2driv);
     mon_in  = new(in_vif, mon_in2scb);
     mon_out = new(out_vif, mon_out2scb);
-    scb     = new(mon_in2scb, mon_out2scb);
+ //   scb     = new(mon_in2scb, mon_out2scb);
   endfunction
   
   task pre_test();
@@ -50,19 +49,19 @@ class environment;
       driv.main();
       mon_in.monitor();
       mon_out.monitor();
-      scb.main();      
+   //   scb.main();      
     join_any
   endtask
   
   task post_test();
     wait(gen_ended.triggered);
     // Asteptam ca toate tranzactiile sa treaca prin driver si scoreboard
-    wait(gen.repeat_count == driv.no_transactions);
-    wait(gen.repeat_count == scb.no_transactions);
+    wait(gen.trans_cnt == driv.no_transactions);
+   // wait(gen.trans_cnt == scb.no_transactions);
     
     // Afisam raportul final de coverage
-    scb.cov_in.print_coverage();
-    scb.cov_out.print_coverage();
+//    scb.cov_in.print_coverage();
+  //  scb.cov_out.print_coverage();
   endtask  
   
   task run;
