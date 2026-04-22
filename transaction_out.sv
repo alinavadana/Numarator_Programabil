@@ -24,8 +24,8 @@ class transaction_out;
   endfunction
   
   //operator de copiere a unui obiect intr-un alt obiect (deep copy)
-  function transaction do_copy();
-    transaction trans;
+  function transaction_out do_copy();
+    transaction_out trans;
     trans = new();
 	trans.count_o  = this.count_o;
     trans.ovf_o  = this.ovf_o;
