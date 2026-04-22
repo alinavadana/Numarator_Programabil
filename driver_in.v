@@ -12,7 +12,9 @@ class driver_in;
 
   task reset;
     // Asteptam front negativ de reset -> activare reset
-    @(negedge in_vif.rst_ni);
+    
+    $display("[%0t] ---- [DRIVER] BEFORE RESET ----", $time);
+    @( !in_vif.rst_ni);
 
     $display("[%0t] ---- [DRIVER] RESET STARTED ----", $time);
     in_vif.driver_cb.valid_i <= 1'b0;
