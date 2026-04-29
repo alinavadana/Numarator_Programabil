@@ -1,4 +1,4 @@
-  interface interface_out(input logic clk, rst_n);
+  interface interface_out(input logic clk, rst_ni);
   logic [7:0] count_o;
   logic ovf_o;
 
@@ -12,32 +12,32 @@
   
   
   //monitor modport  
-  modport MONITOR (clocking monitor_cb,input clk,rst_n);
+  modport MONITOR (clocking monitor_cb,input clk,rst_ni);
 
   
 
 //-------------Asertii_ovf_o-----------------
    property ovf_asserted;
-    @(posedge clk) disable iff (rst_n==0)//daca avem reset, nu se executa asertia
+    @(posedge clk) disable iff (rst_ni==0)//daca avem reset, nu se executa asertia
     ovf_o |-> ((count_o==0) or ($past(count_o)==0)) ; 
    endproperty
   
-  asertia_ovf_asserted assert property (ovf_asserted) 
+  asertia_ovf_asserted: assert property (ovf_asserted) 
     else $error("INTERFATA_IESIRE: a picat asertia asertia_ovf_assertedn");
-    ovf_asserted: cover property (ovf_asserted);//ne asiguram ca proprietatea a fost accesata macar o data
+    ovf_asserted_c: cover property (ovf_asserted);//ne asiguram ca proprietatea a fost accesata macar o data
 
 
 
 //-------------Asertii_count_o-----------------
    property count_asserted;
-    @(posedge clk) disable iff (rst_n==0)//daca avem reset, nu se executa asertia
+    @(posedge clk) disable iff (rst_ni==0)//daca avem reset, nu se executa asertia
      ($past(count_o)==255) and (count_o==0) ||
       ($past(count_o)==0) and (count_o==255)     |-> ovf_o;
    endproperty
   
-  asertia_count_asserted assert property (count_asserted) 
+  asertia_count_asserted: assert property (count_asserted) 
     else $error("INTERFATA_IESIRE: a picat asertia count_asserted");
-    count_asserted: cover property (count_asserted);
+    count_asserted_c: cover property (count_asserted);
 
 
 
