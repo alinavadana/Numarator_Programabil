@@ -81,7 +81,11 @@ class environment;
     $display("%0t --- [ENV]  dupa test---", $time);
     post_test();
     $display("--- SIMULARE TERMINATA CU SUCCES ---");
-    #300
+    #3000
+    report();
+    
+    
+    
     $finish;
   endtask
   
