@@ -11,11 +11,15 @@ class monitor_out;
   // Contor pentru tranzactiile de iesire monitorizate
   int no_transactions;
 
+  coverage_out coverage_collector;
+
   // Constructor
   function new(virtual interface_out out_vif, mailbox mon2scb);
     this.out_vif     = out_vif;
     this.mon2scb     = mon2scb;
     this.no_transactions = 0;
+
+    coverage_collector = new();
   endfunction
 
   // Task pentru gestionarea reset-ului pe interfata de iesire
@@ -49,11 +53,13 @@ class monitor_out;
       no_transactions++;
 
       // Afisare pentru debug
-      $display("[%0t] ----[MONITOR_OUT] Iesire #%0d: Count=%0d, Ovf=%0d----", 
-                $time, no_transactions, trans.count_o, trans.ovf_o);
+      //$display("[%0t] ----[MONITOR_OUT] Iesire #%0d: Count=%0d, Ovf=%0d----", 
+      //          $time, no_transactions, trans.count_o, trans.ovf_o);
 
       // Trimitem obiectul catre Scoreboard pentru validare
       mon2scb.put(trans);
+
+      coverage_collector.sample_function(trans);
     end
   endtask
 
