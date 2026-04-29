@@ -1,7 +1,7 @@
-interface interface_in(input logic clk, rst_n);
+interface interface_in(input logic clk, rst_ni);
 
   logic valid_i;
-  logic rd_wr_i;
+  logic rd_wr;
   logic [1:0] addr_i;
   logic [7:0] d_in;
   logic [7:0] d_out;
@@ -12,7 +12,7 @@ interface interface_in(input logic clk, rst_n);
   input d_out;
   output d_in;
   output addr_i;
-  output rd_wr_i;
+  output rd_wr;
   output valid_i;
   endclocking
   
@@ -22,15 +22,15 @@ interface interface_in(input logic clk, rst_n);
     input addr_i;
     input d_in;
     input d_out;
-    input rd_wr_i;
+    input rd_wr;
     input valid_i;  
   endclocking
   
   //driver modport
-  modport DRIVER  (clocking driver_cb,input clk,rst_n);
+  modport DRIVER  (clocking driver_cb,input clk,rst_ni);
   
   //monitor modport  
-  modport MONITOR (clocking monitor_cb,input clk,rst_n);
+  modport MONITOR (clocking monitor_cb,input clk,rst_ni);
 
           //asertii pe interfata
 	//nu avem voie sa avem si read si write in acelai timp
@@ -38,11 +38,11 @@ interface interface_in(input logic clk, rst_n);
 
   //-------------Asertii_addr-----------------
    property steady_addr_i_during_transaction;
-     @(posedge clk) disable iff (rst_n==0)//daca avem reset, nu se executa asertia
+     @(posedge clk) disable iff (rst_ni==0)//daca avem reset, nu se executa asertia
      valid_i |-> (addr_i != 'bz) and (addr_i != 'bx);
   endproperty
   
-  asertia_steady_addr_i_during_transaction assert property (steady_addr_i_during_transaction) 
+  asertia_steady_addr_i_during_transaction: assert property (steady_addr_i_during_transaction) 
     else $error("INTERFATA_INTRARE: a picat asertia asertia_steady_addr_i_during_transaction");
     steady_addr_i_during_transaction_C: cover property (steady_addr_i_during_transaction);//ne asiguram ca proprietatea a fost accesata macar o data
       
@@ -50,46 +50,46 @@ interface interface_in(input logic clk, rst_n);
 
 //-------------Asertii_d_in-----------------
    property steady_d_in_during_transaction;
-    @(posedge clk) disable iff (rst_n==0)//daca avem reset, nu se executa asertia
-    valid_i && !rd_wr_i|-> (d_in != 'bz) and (d_in != 'bx);  // cand scrierea este valida
+    @(posedge clk) disable iff (rst_ni==0)//daca avem reset, nu se executa asertia
+    valid_i && !rd_wr|-> (d_in != 'bz) and (d_in != 'bx);  // cand scrierea este valida
    endproperty
   
-  asertia_steady_d_in_during_transaction assert property (steady_d_in_during_transaction) 
+  asertia_steady_d_in_during_transaction: assert property (steady_d_in_during_transaction) 
     else $error("INTERFATA_INTRARE: a picat asertia asertia_steady_d_in_during_transaction");
     steady_d_in_during_transaction_C: cover property (steady_d_in_during_transaction);//ne asiguram ca proprietatea a fost accesata macar o data
 
 
 //-------------Asertii_d_out-----------------
    property steady_d_out_during_transaction;
-    @(posedge clk) disable iff (rst_n==0)//daca avem reset, nu se executa asertia
-    valid_i && rd_wr_i |=> (d_out != 'bz) and (d_out != 'bx);
+    @(posedge clk) disable iff (rst_ni==0)//daca avem reset, nu se executa asertia
+    valid_i && rd_wr |=> (d_out != 'bz) and (d_out != 'bx);
    endproperty
   
-  asertia_steady_d_out_during_transaction assert property (steady_d_out_during_transaction) 
+  asertia_steady_d_out_during_transaction: assert property (steady_d_out_during_transaction) 
     else $error("INTERFATA_INTRARE: a picat asertia asertia_steady_d_out_during_transaction");
     steady_d_out_during_transaction_C: cover property (steady_d_out_during_transaction);//ne asiguram ca proprietatea a fost accesata macar o data
 
 
 //-------------Asertii_rd_wr_i-----------------
    property steady_rd_wr_i_during_transaction;
-     @(posedge clk) disable iff (rst_n==0)//daca avem reset, nu se executa asertia
-     valid_i |-> (rd_wr_i != 'bz) and (rd_wr_i != 'bx);
+     @(posedge clk) disable iff (rst_ni==0)//daca avem reset, nu se executa asertia
+     valid_i |-> (rd_wr != 'bz) and (rd_wr != 'bx);
   endproperty
   
-  asertia_steady_rd_wr_i_during_transaction assert property (steady_rd_wr_i_during_transaction) 
+  asertia_steady_rd_wr_i_during_transaction: assert property (steady_rd_wr_i_during_transaction) 
     else $error("INTERFATA_INTRARE: a picat asertia asertia_steady_rd_wr_i_during_transaction");
     steady_rd_wr_i_during_transaction_C: cover property (steady_rd_wr_i_during_transaction);//ne asiguram ca proprietatea a fost accesata macar o data
       
 
 // la scriere, addr_i, d_in si rd_wr_i sa ramana stabile
    property write_bus_stable;
-     @(posedge clk) disable iff (!rst_n)
-     (valid_i && !rd_wr_i) |=> ($stable(addr_i) && $stable(d_in) && $stable(rd_wr_i));
+     @(posedge clk) disable iff (!rst_ni)
+     (valid_i && !rd_wr) |=> ($stable(addr_i) && $stable(d_in) && $stable(rd_wr));
   endproperty
 
-  assert_write_bus_stable assert property (write_bus_stable)
+  assert_write_bus_stable: assert property (write_bus_stable)
     else $error("INTERFATA_INTRARE: semnalele de write nu au ramas stabile");
-    write_bus_stable_C cover property (write_bus_stable);
+    write_bus_stable_C: cover property (write_bus_stable);
       
   
   
