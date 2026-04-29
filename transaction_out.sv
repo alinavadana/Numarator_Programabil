@@ -9,19 +9,21 @@ class transaction_out;
   bit [7:0] count_o;
   bit ovf_o;
 	   
-  int cnt; //pt utilizare a tranzactilor ca sa stim cate tranzactii folosim 
+  static int cnt; //pt utilizare a tranzactilor ca sa stim cate tranzactii folosim 
   int delay;
   
   
   //aceasta functie este apelata dupa aplicarea functiei randomize() asupra obiectelor apartinand acestei clase
   //aceasta functie afiseaza valorile aleatorizate ale atributelor clasei
-  function void display();
-    $display("--------- tranzactia nr %d randomizata : ------");
+  function void post_randomize();
+    $display("--------- tranzactia de ieisre nr %d randomizata : ------", cnt);
     $display("count_o = %0b",count_o);
 	$display("ovf_o = %0b",ovf_o);
 	$display("delay = %0d",delay);
 	$display("----------------------------------------------------------------------------------------------------------------------");
+  cnt++;
   endfunction
+
   
   //operator de copiere a unui obiect intr-un alt obiect (deep copy)
   function transaction_out do_copy();
