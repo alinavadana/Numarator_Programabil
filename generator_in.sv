@@ -2,7 +2,7 @@ class generator_in;
 
 rand transaction_in trans, tr;
 
-int trans_cnt;
+int trans_cnt = 10;
 
 mailbox gen2driv;
 
@@ -17,7 +17,7 @@ function new(mailbox gen2driv, event ended);
 endfunction
 
 task main();
-
+$display("%0t trans_cnt este %0d", $time(), trans_cnt);
  repeat(trans_cnt) begin
     if (!trans.randomize())
         $error("Generator failed to randomize");
