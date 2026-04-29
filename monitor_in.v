@@ -9,11 +9,14 @@ class monitor_in;
   // Contor tranzactii monitorizate
   int no_transactions;
 
+  coverage_in coverage_collector;
+
   // Constructor
   function new(virtual interface_in.MONITOR in_vif, mailbox mon2scb);
     this.in_vif    = in_vif;
     this.mon2scb   = mon2scb;
     no_transactions = 0;
+    coverage_collector = new();
   endfunction
 
 
@@ -66,6 +69,8 @@ class monitor_in;
 
         // Trimitem tranzactia catre scoreboard
         mon2scb.put(trans);
+        //inregistram datele din tranzactie
+        coverage_collector.sample(trans);
 
       end 
 
