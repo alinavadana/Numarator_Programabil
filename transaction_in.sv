@@ -5,14 +5,14 @@ class transaction_in;
     rand bit [1:0] addr_i;
     rand bit [7:0] d_in;
          bit [7:0] d_out;
-    int cnt;
+    static int cnt;
     rand int delay;
 
 // intarzierile intre tranzactii pot fi intre 0 si 10 tacte 
     constraint delay_constr {delay > 0 && delay < 10;}
 
     function void display();
-        $display("-----Tranzactia nr. %0d randomizata:-----", cnt);
+        $display("-----Tranzactia de intrare nr. %0d randomizata:-----", cnt);
         $display("valid_i = %0b", valid_i);
         $display("rd_wr = %0b", rd_wr);
         $display("addr_i = %0b", addr_i);
@@ -20,7 +20,12 @@ class transaction_in;
         $display("d_out = %0b", d_out);
         $display("delay = %0d", delay);
         $display("-------------------------------------");
+        cnt++;
     endfunction
+
+      function void post_randomize();
+        display();
+  endfunction
 
     function transaction_in do_copy();
         transaction_in trans;
@@ -35,3 +40,4 @@ class transaction_in;
         return trans;
         endfunction
 endclass
+
