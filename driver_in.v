@@ -14,7 +14,7 @@ class driver_in;
     // Asteptam front negativ de reset -> activare reset
     
     $display("[%0t] ---- [DRIVER] BEFORE RESET ----", $time);
-    @( !in_vif.rst_ni);
+    wait( in_vif.rst_ni == 0);
 
     $display("[%0t] ---- [DRIVER] RESET STARTED ----", $time);
     in_vif.driver_cb.valid_i <= 1'b0;
