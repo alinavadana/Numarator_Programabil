@@ -1,7 +1,7 @@
 
 `include "environment.sv"
 
-program test(interface_in in_intf, interface_out out_intf);
+program test_simplu(interface_in in_intf, interface_out out_intf);
 
     environment env;
 
@@ -11,7 +11,7 @@ program test(interface_in in_intf, interface_out out_intf);
         env = new(in_intf, out_intf);
         
         // Setăm numărul de tranzacții ce urmează a fi generate de generator_in 
-        env.gen.trans_cnt = 0;
+        env.gen.trans_cnt = 4;
 
         env.gen.write_register(0, 8'b11001000);
         env.gen.read_register(0);
