@@ -1,6 +1,6 @@
 `include "environment.sv"
 
-program test_limita(intf_in in_intf, intf_out out_intf);
+program test_limita(interface_in in_intf, interface_out out_intf);
 
     environment env;
 
@@ -17,7 +17,7 @@ program test_limita(intf_in in_intf, intf_out out_intf);
     // Bit 7: Enable = 1
     // Bit 0: Load = 1
     // 8'b10000001 
-    env.gen.write_register(0, 8'b10000001);
+    env.gen.write_register(0, 8'b1000_0001);
 
     env.gen.trans_cnt = 0;
     env.run();
