@@ -1,4 +1,3 @@
-
 `include "environment.sv"
 
 program test_simplu(interface_in in_intf, interface_out out_intf);
